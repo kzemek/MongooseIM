@@ -737,6 +737,7 @@ is_privacy_allow(From, To, Packet, PrivacyList) ->
       To :: ejabberd:jid(),
       Packet :: jlib:xmlel().
 route_message(From, To, Packet) ->
+    Acc = mongoose_stanza:from_element(Packet),
     LUser = To#jid.luser,
     LServer = To#jid.lserver,
     PrioPid = get_user_present_pids(LUser, LServer),
@@ -773,7 +774,7 @@ route_message(From, To, Packet) ->
                                                        [From, To, Packet]);
                                 false ->
                                     ejabberd_hooks:run_fold(failed_to_store_message,
-                                                            LServer, Packet, [From]),
+                                                            LServer, Acc, [From]),
                                     ok
                             end;
                         _ ->
