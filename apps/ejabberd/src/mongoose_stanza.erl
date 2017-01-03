@@ -12,7 +12,7 @@
 -include("ejabberd.hrl").
 
 %% API
--export([new/0, from_kv/2, put/3, get/2, get/3, append/3, to_map/1]).
+-export([new/0, from_kv/2, put/3, get/2, get/3, append/3, to_map/1, update/2]).
 -export([from_element/1, from_map/1]).
 -export([initialise/3, terminate/3, dump/1]).
 -export_type([t/0]).
@@ -39,6 +39,10 @@ dump(Stanza) ->
 -spec new() -> t().
 new() ->
     #{}.
+
+-spec update(t(), map() | t()) -> t().
+update(Stanza, M) ->
+    maps:merge(Stanza, M).
 
 -spec from_map(map()) -> t().
 from_map(M) ->
