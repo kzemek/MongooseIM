@@ -45,10 +45,10 @@
 
 %% Text search
 -import(mod_mam_utils, [
-    packet_to_search_body/1,
     normalize_search_text/1,
     normalize_search_text/2
 ]).
+-import(mod_mam, [packet_to_search_body/2]).
 
 %% Other
 -import(mod_mam_utils,
@@ -239,7 +239,7 @@ do_archive_message(_Result, Host, MessID, UserID,
     SDir = encode_direction(Dir),
     SRemLResource = ejabberd_odbc:escape(RemLResource),
     Data = packet_to_stored_binary(Packet),
-    TextBody = packet_to_search_body(Packet),
+    TextBody = packet_to_search_body(Host, Packet),
     STextBody = ejabberd_odbc:escape(TextBody),
     string:to_lower(STextBody),
     EscFormat = ejabberd_odbc:escape_format(Host),
@@ -279,7 +279,7 @@ prepare_message(Host, MessID, UserID,
     EscFormat = ejabberd_odbc:escape_format(Host),
     SData = ejabberd_odbc:escape_binary(EscFormat, Data),
     SMessID = integer_to_list(MessID),
-    TextBody = packet_to_search_body(Packet),
+    TextBody = packet_to_search_body(Host, Packet),
     STextBody = ejabberd_odbc:escape(TextBody),
     [SMessID, SUserID, SBareRemJID, SRemLResource, SDir, SSrcJID, SData, STextBody].
 
@@ -675,7 +675,7 @@ calc_count(Host, UserID, Filter, IndexHintSQL) ->
 -spec prepare_filter(UserID :: mod_mam:archive_id(), UserJID :: ejabberd:jid(),
                      Borders :: mod_mam:borders(), Start :: mod_mam:unix_timestamp() | undefined,
                      End :: mod_mam:unix_timestamp() | undefined, WithJID :: ejabberd:jid(),
-                     SearchText :: binary() | undefined)
+                     SearchText :: string() | undefined)
                     -> filter().
 prepare_filter(UserID, UserJID, Borders, Start, End, WithJID, SearchText) ->
     {SWithJID, SWithResource} =
@@ -699,7 +699,7 @@ prepare_filter(UserID, UserJID, Borders, Start, End, WithJID, SearchText) ->
                          EndID :: mod_mam:message_id() | undefined,
                          SWithJID :: escaped_jid() | undefined,
                          SWithResource :: escaped_resource() | undefined,
-                         SearchText :: binary() | undefined) -> filter().
+                         SearchText :: string() | undefined) -> filter().
 prepare_filter_sql(UserID, StartID, EndID, SWithJID, SWithResource, SearchText) ->
     ["WHERE user_id='", escape_user_id(UserID), "'",
      case StartID of
