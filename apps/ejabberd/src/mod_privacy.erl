@@ -423,7 +423,6 @@ is_type_match(Type, Value, JID, Subscription, Groups) ->
             lists:member(Value, Groups)
     end.
 
-%% #rh
 remove_user(Acc, User, Server) ->
     case remove_user(User, Server) of
         ok -> Acc;

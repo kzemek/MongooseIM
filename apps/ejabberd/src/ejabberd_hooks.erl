@@ -108,7 +108,7 @@ run(Hook, Args) ->
           Host :: ejabberd:server() | global,
           Args :: [any()]) -> ok.
 run(Hook, Host, Args) ->
-    run_fold(Hook, Host, #{}, Args).
+    run_fold(Hook, Host, mongoose_stanza:t(), Args).
 
 %% @spec (Hook::atom(), Val, Args) -> Val | stopped | NewVal
 %% @doc Run the calls of this hook in order.
@@ -119,7 +119,6 @@ run(Hook, Host, Args) ->
 run_fold(Hook, Val, Args) ->
     run_fold(Hook, global, Val, Args).
 
-%%run_fold(Hook, Host, #{} = Val, Args) -> % now it MUST be a map
 run_fold(Hook, Host, Val, Args) ->
     case ets:lookup(hooks, {Hook, Host}) of
         [{_, Ls}] ->
