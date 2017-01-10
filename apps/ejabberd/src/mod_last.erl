@@ -247,7 +247,7 @@ get_last_info(LUser, LServer) ->
         Res -> Res
     end.
 
--spec remove_user(any(), ejabberd:user(), ejabberd:server()) -> any() | {error, term()}.
+-spec remove_user(any(), ejabberd:user(), ejabberd:server()) -> mongoose_stanza:t() | {error, term()}.
 remove_user(Acc, User, Server) ->
     LUser = jid:nodeprep(User),
     LServer = jid:nameprep(Server),
