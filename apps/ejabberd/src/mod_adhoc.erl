@@ -165,7 +165,7 @@ get_sm_identity(Acc, _From, _To, ?NS_COMMANDS, Lang) ->
             attrs = [{<<"category">>, <<"automation">>},
                      {<<"type">>, <<"command-list">>},
                      {<<"name">>, translate:translate(Lang, <<"Commands">>)}]},
-    mongoose_stanza:append(sm_identity, Id, Acc);
+    maps:append(sm_identity, Id, Acc);
 get_sm_identity(Acc, _From, _To, _Node, _Lang) ->
     Acc.
 

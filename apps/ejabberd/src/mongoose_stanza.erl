@@ -65,7 +65,7 @@ from_element(El) ->
     #{element => El, mongoose_stanza=>true}.
 
 %% @doc convert to map so that we can pattern-match on it
--spec to_map(t()) -> map()|{error, cant_convert_to_map}.
+-spec to_map(any()) -> map()|{error, cant_convert_to_map}.
 to_map(P) when is_map(P) ->
     P;
 to_map(_) ->

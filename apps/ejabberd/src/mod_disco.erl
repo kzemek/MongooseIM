@@ -345,8 +345,10 @@ get_sm_items(Acc, From,
                     []
             end
     end,
-    mongoose_stanza:append(sm_items, Items1, Acc).
-get_sm_items(From, To) ->
+    mongoose_stanza:append(sm_items, Items1, Acc);
+get_sm_items({result, _} = Acc, _From, _To, _Node, _Lang) ->
+    Acc;
+get_sm_items(empty, From, To, _Node, _Lang) ->
     #jid{luser = LFrom, lserver = LSFrom} = From,
     #jid{luser = LTo, lserver = LSTo} = To,
     case {LFrom, LSFrom} of
@@ -409,7 +411,6 @@ process_sm_iq_info(true, From, To, #iq{type = get, lang = Lang, sub_el = SubEl} 
     end;
 process_sm_iq_info(false, _From, _To, #iq{type = get, sub_el = SubEl} = IQ) ->
     IQ#iq{type = error, sub_el = [SubEl, ?ERR_SERVICE_UNAVAILABLE]}.
-
 
 -spec get_sm_identity(Acc :: mongoose_stanza:t(),
                       From :: ejabberd:jid(),
