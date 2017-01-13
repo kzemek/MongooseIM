@@ -202,6 +202,8 @@ update_metric_and_drop(Packet, From) ->
                        [From, message_target(Packet), Packet]),
     drop.
 
+%% Internal
+
 -spec is_supported_rule(amp_rule_support()) -> boolean().
 is_supported_rule({supported, _}) -> true;
 is_supported_rule(_)              -> false.

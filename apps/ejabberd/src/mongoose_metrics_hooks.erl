@@ -232,7 +232,7 @@ register_user(Acc, _,Server) ->
     mongoose_metrics:update(Server, modRegisterCount, 1),
     Acc.
 
--spec remove_user(any(), binary(), ejabberd:server()) -> metrics_notify_return().
+-spec remove_user(mongoose_stanza:t(), binary(), ejabberd:server()) -> mongoose_stanza:t().
 remove_user(Acc, _,Server) ->
     mongoose_metrics:update(Server, modUnregisterCount, 1),
     Acc.

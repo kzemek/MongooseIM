@@ -345,10 +345,8 @@ get_sm_items(Acc, From,
                     []
             end
     end,
-    mongoose_stanza:append(sm_items, Items1, Acc);
-get_sm_items({result, _} = Acc, _From, _To, _Node, _Lang) ->
-    Acc;
-get_sm_items(empty, From, To, _Node, _Lang) ->
+    mongoose_stanza:append(sm_items, Items1, Acc).
+get_sm_items(From, To) ->
     #jid{luser = LFrom, lserver = LSFrom} = From,
     #jid{luser = LTo, lserver = LSTo} = To,
     case {LFrom, LSFrom} of
