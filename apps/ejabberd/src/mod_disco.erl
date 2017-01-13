@@ -410,6 +410,7 @@ process_sm_iq_info(true, From, To, #iq{type = get, lang = Lang, sub_el = SubEl} 
 process_sm_iq_info(false, _From, _To, #iq{type = get, sub_el = SubEl} = IQ) ->
     IQ#iq{type = error, sub_el = [SubEl, ?ERR_SERVICE_UNAVAILABLE]}.
 
+
 -spec get_sm_identity(Acc :: mongoose_stanza:t(),
                       From :: ejabberd:jid(),
                       To :: ejabberd:jid(),
