@@ -97,16 +97,15 @@ stop(Host) ->
 user_send_packet(From = #jid{lserver = Host}, To, Packet) ->
     ?DEBUG("SNS Packet handle~n    from ~p ~n    to ~p~n    packet ~p.", [From, To, Packet]),
 
-    case {get_topic(Host, Packet), xml:get_subtag(Packet, <<"body">>)} of
+    case {get_topic(Host, Packet), exml_query:subelement(Packet, <<"body">>)} of
         {undefined, _} -> %% Skip if there is no topic set in configuration for the packet type
             skip;
-        {_, false} -> %% Skip if there is no message body in the packet
+        {_, undefined} -> %% Skip if there is no message body in the packet
             skip;
         {Topic, BodyTag} ->
             FromGUID = user_guid(Host, From),
             ToGUID = user_guid(Host, To),
-
-            MessageBody = xml:get_tag_cdata(BodyTag),
+            MessageBody = exml_query:cdata(BodyTag),
             Content = #{from_user_id => FromGUID,
                         to_user_id => ToGUID,
                         message => MessageBody},
@@ -203,7 +202,7 @@ make_topic_arn(Host, Topic) ->
 %% @doc Returns message type
 -spec message_type(Packet :: jlib:xmlel()) -> pm | muc | undefined.
 message_type(Packet) ->
-    case xml:get_tag_attr_s(<<"type">>, Packet) of
+    case exml_query:attr(Packet, <<"type">>) of
         <<"chat">> -> pm;
         <<"groupchat">> -> muc;
         _ -> undefined

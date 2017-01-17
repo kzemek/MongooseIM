@@ -45,7 +45,7 @@ app_opts() ->
      {"riak",      ["riakc", "riak_pb", "protobuffs"],
                                         include_driver("riak")},
      {"cassandra", ["cqerl", "pooler", "re2", "semver", "snappy", "lz4", "uuid"],
-                                        include_driver("cassandra")}],
+                                        include_driver("cassandra")},
      {"aws",       ["erlcloud", "jsx", "lhttpc", "eini"], "include support for AWS services"}].
 
 opts() ->
