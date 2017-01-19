@@ -17,7 +17,7 @@
 -export([archive_size/4,
          archive_message/9,
          lookup_messages/14,
-         remove_archive/3,
+         remove_archive/4,
          purge_single_message/6,
          purge_multiple_messages/9]).
 
@@ -223,14 +223,14 @@ delete_message_to_params(#mam_message{
 remove_archive_query_cql() ->
     "DELETE FROM mam_message WHERE user_jid = ?".
 
-remove_archive(_Host, _UserID, UserJID) ->
+remove_archive(Acc, _Host, _UserID, UserJID) ->
     BUserJID = bare_jid(UserJID),
     PoolName = pool_name(UserJID),
     Params = #{user_jid => BUserJID},
     %% Wait until deleted
 
     mongoose_cassandra:cql_write(PoolName, UserJID, ?MODULE, remove_archive_query, [Params]),
-    ok.
+    Acc.
 
 
 %% ----------------------------------------------------------------------
