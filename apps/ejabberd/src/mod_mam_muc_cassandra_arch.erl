@@ -14,7 +14,7 @@
 -export([archive_size/4,
          archive_message/9,
          lookup_messages/14,
-         remove_archive/3,
+         remove_archive/4,
          purge_single_message/6,
          purge_multiple_messages/9]).
 
@@ -220,14 +220,14 @@ delete_message_to_params(#mam_muc_message{
 remove_archive_query_cql() ->
     "DELETE FROM mam_muc_message WHERE room_jid = ?".
 
-remove_archive(_Host, _RoomID, RoomJID) ->
+remove_archive(Acc, _Host, _RoomID, RoomJID) ->
     BRoomJID = bare_jid(RoomJID),
     PoolName = pool_name(RoomJID),
     Params = #{room_jid => BRoomJID},
     %% Wait until deleted
 
     mongoose_cassandra:cql_write(PoolName, RoomJID, ?MODULE, remove_archive_query, [Params]),
-    ok.
+    Acc.
 
 %% ----------------------------------------------------------------------
 %% GET NICK NAME
