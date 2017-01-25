@@ -1,6 +1,7 @@
 -module(mongoose_client_api_sse).
 
--behaviour(lasse_handler).
+%% Dialyzer fails on Erlang releases without this fix: https://github.com/erlang/otp/pull/934
+%-behaviour(lasse_handler).
 
 -include("ejabberd.hrl").
 -include("jlib.hrl").
@@ -66,4 +67,3 @@ maybe_send_message_event(<<"groupchat">>, Packet, Timestamp, #{id := ID} = State
     {send, Event, State#{id := ID + 1}};
 maybe_send_message_event(_, _, _, State) ->
     {nosend, State}.
-
